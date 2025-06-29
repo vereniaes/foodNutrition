@@ -5,16 +5,18 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy the requirements file into the container at /app
-COPY ./requirements.txt /app/requirements.txt
+COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
-# Use --no-cache-dir to reduce image size
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application's code into the container at /app
-COPY . /app
+COPY . .
 
-# The command to run the application
-# Use 0.0.0.0 to make it accessible from outside the container
-# The app will run on port 80 inside the container
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
+# Make sure your model file is in the right directory
+# The model file 'model.h5' should be inside 'saved_model' directory
+# RUN mkdir -p saved_model
+# COPY saved_model/model.h5 saved_model/
+
+# Command to run the application
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
